@@ -107,8 +107,10 @@ class User(db.Model):
         self.user_type=user_type
 
 
-@app.route('/api/user_auth', methods=['GET'])
-def authenticate_user(username, password):
+@app.route('/api/user_auth/', methods=['GET'])
+def authenticate_user():
+    username = request.args.get('username')
+    password = request.args.get('password')
     user = User.query.filter_by(username=username).first()
     if user and user.password == password:
         data={'output':user.user_type}
