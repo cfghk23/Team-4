@@ -58,11 +58,6 @@ class Chat:
     def generate_response(self, sms_input):
         return self.llm.predict(sms_input=sms_input)
 
-# # Set up OpenAI API key
-# with open('openai_api_key.txt') as f:
-#     lines = f.readlines()
-
-# os.environ['REPLICATE_API_TOKEN'] 
 
 template = """You are an assistant for students ranging from under primary to upper secondary studying financial concepts to improve their financial literacy. 
 Please act as an expert in the financial industry, including personal finance, budgeting, stock market investing, etc.
@@ -74,7 +69,7 @@ Assistant:"""
 
 prompt = PromptTemplate(input_variables=["sms_input"], template=template)
 
-chat = Chat(model_name="a16z-infra/llama13b-v2-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5", 
+chat = Chat(model_name="meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e", 
             prompt_template=prompt)
 
 
@@ -96,7 +91,55 @@ def test():
     else:
         return jsonify({'test': 'success'})
 
+@app.route('/api/<int:student_id>', methods=['GET'])
+def get_student_results(student_id):
+    # Retrieve the student's performance result data based on the student_id
+    # and format it as required by ApexCharts
+    student_scores = Scores.query.filter_by(student_id=student_id).all()
 
+    subject_names = []
+    scores = []
+
+    for score in student_scores:
+        subject_names.append(score.subject)
+        scores.append(score.score)
+
+    data = {
+        'options': {
+            'chart': {
+                'type': 'bar',
+            },
+            'xaxis': {
+                'categories': subject_names,  # Example subject names
+            },
+        },
+        'series': [
+            {
+                'name': 'Score',
+                'data': scores,  # Example scores
+            },
+        ],
+    }
+    return jsonify(data)
+
+
+# inb_msg = '''I don't know what stock is. Can you explain it to me as a kindergarten student?'''
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    print("I run")
+    if request.method == 'POST':
+        data = request.get_json()
+        sms_input = data.get('sms_input')
+        print("I am here")
+        if sms_input:
+            print("I have an sms")
+            response = chat.generate_response(sms_input=sms_input)
+            print(response)
+            return jsonify({'response': response})
+
+    return jsonify({'error': 'Invalid request'})
+    
 if __name__ == '__main__':
     app.run(host=HOST,
             debug=True,

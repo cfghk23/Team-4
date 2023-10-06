@@ -77,6 +77,9 @@ const config = {
             to: '/chat_page', label: 'Chat', position: 'left'
           },
           {
+            to: '/token_page', label: 'Tokens', position: 'left'
+          },
+          {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
