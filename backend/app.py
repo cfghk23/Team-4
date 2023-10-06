@@ -53,7 +53,47 @@ class Student(db.Model):
         self.password=password
         self.age_group=age_group
 
+class Class(db.Model):
+    __tablename__='classes'
+    id=db.Column(db.Integer, primary_key=True)
+    class_name=db.Column(db.String(255), nullable=False)
+    students=db.relationship('students', backref='class', lazy=True)
+    
+    def __init__(self, class_name):
+        self.class_name=class_name
 
+class Teacher(db.Model):
+    __tablename__='teachers'
+    id=db.Column(db.Integer, primary_key=True)
+    teacher_name=db.Column(db.String(255), nullable=False)
+    password=db.Column(db.String(255), nullable=False)
+    school=db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=False)
+    classes=db.relationship('classes', backref='teacher', lazy=True)
+    
+    def __init__(self, teacher_name,password):
+        self.teacher_name=teacher_name
+        self.password=password
+
+class School(db.Model):
+    __tablename__='schools'
+    id=db.Column(db.Integer, primary_key=True)
+    school_name=db.Column(db.String(255), nullable=False)
+    teachers=db.relationship('teachers', backref='school', lazy=True)
+    students=db.relationship('students', backref='school', lazy=True)
+    
+    def __init__(self, school_name):
+        self.school_name=school_name
+class Admin(db.Model):
+    __tablename__='admins'
+    id=db.Column(db.Integer, primary_key=True)
+    admin_name=db.Column(db.String(255), nullable=False)
+    password=db.Column(db.String(255), nullable=False)
+    
+    def __init__(self, admin_name,password):
+        self.admin_name=admin_name
+        self.password=password
+
+db.create_all()
 
 # sample hello world page
 @app.route('/')
