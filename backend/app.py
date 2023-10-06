@@ -65,14 +65,14 @@ class Class(db.Model):
 class Teacher(db.Model):
     __tablename__='teachers'
     id=db.Column(db.Integer, primary_key=True)
-    teacher_name=db.Column(db.String(255), nullable=False)
-    password=db.Column(db.String(255), nullable=False)
+    # teacher_name=db.Column(db.String(255), nullable=False)
+    # password=db.Column(db.String(255), nullable=False)
     school=db.Column(db.Integer, db.ForeignKey('schools.id'), nullable=False)
     classes=db.relationship('classes', backref='teacher', lazy=True)
     
-    def __init__(self, teacher_name,password):
-        self.teacher_name=teacher_name
-        self.password=password
+    # def __init__(self, teacher_name,password):
+    #     self.teacher_name=teacher_name
+    #     self.password=password
 
 class School(db.Model):
     __tablename__='schools'
@@ -86,14 +86,42 @@ class School(db.Model):
 class Admin(db.Model):
     __tablename__='admins'
     id=db.Column(db.Integer, primary_key=True)
-    admin_name=db.Column(db.String(255), nullable=False)
-    password=db.Column(db.String(255), nullable=False)
+    # admin_name=db.Column(db.String(255), nullable=False)
+    # password=db.Column(db.String(255), nullable=False)
     
-    def __init__(self, admin_name,password):
-        self.admin_name=admin_name
-        self.password=password
+    # def __init__(self, admin_name,password):
+    #     self.admin_name=admin_name
+    #     self.password=password
 
-db.create_all()
+class User(db.Model):
+    __tablename__='users'
+    id=db.Column(db.Integer, primary_key=True)
+    # admin=db.relationship('admins', backref='user', lazy=True)
+    # teacher=db.relationship('teachers', backref='user', lazy=True)
+    # student=db.relationship('students', backref='user', lazy=True)
+    user_type=db.Column(db.String(255), nullable=False)
+    # if admin:
+    #     user_type='admin'
+    # elif teacher:
+    #     user_type='teacher'
+    # elif student:
+    #     user_type='student'
+    # else:
+    #     user_type='unknown'
+    username=db.Column(db.String(255), nullable=False)  
+    password=db.Column(db.String(255), nullable=False)
+    def __init__(self, admin_name,password,user_type):
+        self.user_name=admin_name
+        self.password=password
+        self.user_type=user_type
+
+
+
+# def authenticate_user(username, password):
+#     user = User.query.filter_by(username=username).first()
+#     if user and user.password == password:
+#         return True
+#     return False    
 
 # sample hello world page
 @app.route('/')
