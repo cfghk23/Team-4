@@ -8,7 +8,7 @@ PORT = 5000
 # initialize flask application
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:CFG2023@localhost/questions'
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:215730Aw@localhost/questions'
 
 db=SQLAlchemy(app)
 
@@ -31,6 +31,7 @@ class Course(db.Model):
     def __init__(self, course_name, questions):
         self.course_name=course_name
         self.questions=questions
+        
 class RegisteredCourse(db.Model):
     __tablename__='registered_courses'
     id=db.Column(db.Integer, primary_key=True)
@@ -40,6 +41,7 @@ class RegisteredCourse(db.Model):
 
     def __init__(self, score):
         self.score=score
+        
 class Student(db.Model):
     __tablename__='students'
     id=db.Column(db.Integer, primary_key=True)
@@ -96,18 +98,7 @@ class Admin(db.Model):
 class User(db.Model):
     __tablename__='users'
     id=db.Column(db.Integer, primary_key=True)
-    # admin=db.relationship('admins', backref='user', lazy=True)
-    # teacher=db.relationship('teachers', backref='user', lazy=True)
-    # student=db.relationship('students', backref='user', lazy=True)
     user_type=db.Column(db.String(255), nullable=False)
-    # if admin:
-    #     user_type='admin'
-    # elif teacher:
-    #     user_type='teacher'
-    # elif student:
-    #     user_type='student'
-    # else:
-    #     user_type='unknown'
     username=db.Column(db.String(255), nullable=False)  
     password=db.Column(db.String(255), nullable=False)
     def __init__(self, admin_name,password,user_type):
