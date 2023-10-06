@@ -10,6 +10,9 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate 
 from langchain.memory import ConversationBufferWindowMemory 
 from langchain.llms import Replicate
+import replicate
+
+import random
 
 # declare constants
 HOST = '0.0.0.0'
@@ -58,11 +61,11 @@ class Chat:
     def generate_response(self, sms_input):
         return self.llm.predict(sms_input=sms_input)
 
-# Set up OpenAI API key
-with open('openai_api_key.txt') as f:
-    lines = f.readlines()
+# # Set up OpenAI API key
+# with open('openai_api_key.txt') as f:
+#     lines = f.readlines()
 
-os.environ['REPLICATE_API_TOKEN'] = lines[0]
+# os.environ['REPLICATE_API_TOKEN'] = lines[0]
 
 template = """You are an assistant for students ranging from under primary to upper secondary studying financial concepts to improve their financial literacy. 
 Please act as an expert in the financial industry, including personal finance, budgeting, stock market investing, etc.
@@ -74,7 +77,7 @@ Assistant:"""
 
 prompt = PromptTemplate(input_variables=["sms_input"], template=template)
 
-chat = Chat(model_name="a16z-infra/llama13b-v2-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5", 
+chat = Chat(model_name="meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e", 
             prompt_template=prompt)
 
 
@@ -140,6 +143,30 @@ def chat_api():
             return jsonify({'response': response})
 
     return jsonify({'error': 'Invalid request'})
+
+@app.route('/api/badge_gen', methods=['POST'])
+def image_api():
+    if request.method == 'POST':
+        # List of random colors and dinosaur types
+        colors = ['red', 'blue', 'green', 'yellow', 'purple']
+        dinosaur_types = ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Velociraptor', 'Brachiosaurus']
+
+        # Generate random colors and dinosaur type
+        random_color = random.choice(colors)
+        random_dinosaur = random.choice(dinosaur_types)
+
+        # Construct the prompt
+        prompt = f"badge with a dinosaur with {random_color}, {random_dinosaur}. make it look like a badge with vector illustration type. make it 100x100 pixel in a square shape."
+
+        output = replicate.run(
+            "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+            input={"prompt": prompt}
+        )
+        return jsonify({'response': output})
+    
+    return jsonify({'error': 'Invalid request'})
+
+
     
 if __name__ == '__main__':
     app.run(host=HOST,
