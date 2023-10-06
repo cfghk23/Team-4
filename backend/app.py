@@ -24,6 +24,18 @@ def test():
     else:
         return jsonify({'test': 'success'})
 
+#api endpoint for verifying user
+@app.route('/api/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # get parameters from post request
+        parameters = request.get_json()
+        if 'username' in parameters and 'password' in parameters:
+            return jsonify({'value': parameters['username']})   
+        return jsonify({'error'})
+    else:
+        #return the type of User (Student, Admin, Teacher) based on the username
+        return jsonify({'test': 'success'})
 
 if __name__ == '__main__':
     app.run(host=HOST,
