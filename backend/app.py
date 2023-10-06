@@ -107,16 +107,25 @@ class User(db.Model):
         self.user_type=user_type
 
 
-@app.route('/api/user_auth/', methods=['GET'])
+@app.route('/api/user_auth/', methods=['POST'])
 def authenticate_user():
-    username = request.args.get('username')
-    password = request.args.get('password')
-    user = User.query.filter_by(username=username).first()
-    if user and user.password == password:
-        data={'output':user.user_type}
+    data = request.json
+    name = data.get('username')
+    password = data.get('password')
+
+    user = db.session.query(User).filter_by(username=name).first()
+
+    if user:
+        print(user.username)
+
+        if user.password == password:
+            response = {'output': user.user_type}
+        else:
+            response = {'output': 'invalid'}
     else:
-        data={'output':'invalid'}
-    return jsonify(data)   
+        response = {'output': 'user not found'}
+
+    return jsonify(response)
 
 # sample hello world page
 @app.route('/')
