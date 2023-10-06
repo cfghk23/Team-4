@@ -107,12 +107,14 @@ class User(db.Model):
         self.user_type=user_type
 
 
-
-# def authenticate_user(username, password):
-#     user = User.query.filter_by(username=username).first()
-#     if user and user.password == password:
-#         return True
-#     return False    
+@app.route('/api/user_auth', methods=['GET'])
+def authenticate_user(username, password):
+    user = User.query.filter_by(username=username).first()
+    if user and user.password == password:
+        data={'output':user.user_type}
+    else:
+        data={'output':'invalid'}
+    return jsonify(data)   
 
 # sample hello world page
 @app.route('/')
