@@ -128,18 +128,15 @@ def get_student_results(student_id):
     return jsonify(data)
 
 
-inb_msg = '''I don't know what stock is. Can you explain it to me as a kindergarten student?'''
-
-output = chat.generate_response(sms_input=inb_msg)
-print(output)
+# inb_msg = '''I don't know what stock is. Can you explain it to me as a kindergarten student?'''
 
 @app.route('/api/chat', methods=['POST'])
 def chat_api():
     if request.method == 'POST':
-        # data = request.get_json()
-        # sms_input = data.get('sms_input')
-        if inb_msg:
-            response = chat.generate_response(sms_input=inb_msg)
+        data = request.get_json()
+        sms_input = data.get('sms_input')
+        if sms_input:
+            response = chat.generate_response(sms_input=sms_input)
             return jsonify({'response': response})
 
     return jsonify({'error': 'Invalid request'})
