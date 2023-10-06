@@ -71,12 +71,19 @@ const config = {
         },
         items: [
           {
+            to: '/login_page', label: 'Login', position: 'left'
+          },
+          {
+            to: '/chat_page', label: 'Chat', position: 'left'
+          },
+          {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'Tutorial',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',
