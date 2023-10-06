@@ -1,6 +1,7 @@
 import Layout from '@theme/Layout';
 import React, { useState } from 'react';
 
+
 export default function MyReactPage() {
     const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState('');
@@ -27,13 +28,14 @@ export default function MyReactPage() {
 
     return (
         <Layout>
-        <div className="chatbot-layout">
-            <h1>ChatBot Page</h1>
-            <div className="chatbot-messages">
+        <div className="chatbot-layout mt-10" style={{textAlign: 'center', color: 'darkgreen'}}>
+            <h1 style={{fontSize: '5rem'}}>ChatBot Page</h1>
+            <div style={{fontSize: '2rem'}} className="chatbot-messages">
                 {messages.map((message, index) => (
                     <p key={index}>{message}</p>
                 ))}
             </div>
+            
             <div className="chatbot-input">
                 <input
                     type="text"

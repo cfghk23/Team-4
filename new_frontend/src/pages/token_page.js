@@ -22,7 +22,7 @@ export default function MyReactPage() {
 
     const handleGenerateMural = async () => {
         // loop through messages array and call handleSendMessage for each message
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 6; i++) {
             setInputText(messages[i]);
             await handleSendMessage();
         }
@@ -33,6 +33,7 @@ export default function MyReactPage() {
     };
 
     return (
+        
         <Layout>
         <div className="chatbot-layout">
             <h1>Tokens Page</h1>
@@ -44,18 +45,6 @@ export default function MyReactPage() {
             {inputText === '' && (
                 <button onClick={handleGenerateMural}>Generate Mural</button>
             )}
-            <div className="chatbot-input">
-                <input
-                    type="text"
-                    placeholder="Type your message"
-                    value={inputText}
-                    onChange={handleInputChange}
-                    disabled={messages.length > 0}
-                />
-                <button onClick={handleSendMessage} disabled={messages.length > 0}>
-                    Send
-                </button>
-            </div>
         </div>
         </Layout>
     );
